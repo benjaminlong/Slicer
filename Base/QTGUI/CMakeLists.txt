@@ -71,10 +71,14 @@ set(KIT_SRCS
   qSlicerQListQVariantMapMetaType.h
   qSlicerSaveDataDialog.cxx
   qSlicerSaveDataDialog.h
+
   qSlicerSettingsModulesPanel.cxx
   qSlicerSettingsModulesPanel.h
   qSlicerSettingsGeneralPanel.cxx
   qSlicerSettingsGeneralPanel.h
+  qSlicerSettingsPanel.cxx
+  qSlicerSettingsPanel.h
+
   qSlicerStyle.cxx
   qSlicerStyle.h
   qSlicerWidget.cxx
@@ -142,6 +146,7 @@ set(KIT_MOC_SRCS
   qSlicerSaveDataDialog.h
   qSlicerSaveDataDialog_p.h
   qSlicerSettingsModulesPanel.h
+  qSlicerSettingsPanel.h
   qSlicerSettingsGeneralPanel.h
   qSlicerWidget.h
   )

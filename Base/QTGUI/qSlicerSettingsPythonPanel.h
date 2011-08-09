@@ -25,7 +25,7 @@
 #include <QWidget>
 
 // CTK includes
-#include <ctkSettingsPanel.h>
+#include <qSlicerSettingsPanel.h>
 
 // QtGUI includes
 #include "qSlicerBaseQTGUIExport.h"
@@ -34,12 +34,12 @@ class QSettings;
 class qSlicerSettingsPythonPanelPrivate;
 
 class Q_SLICER_BASE_QTGUI_EXPORT qSlicerSettingsPythonPanel
-  : public ctkSettingsPanel
+  : public qSlicerSettingsPanel
 {
   Q_OBJECT
 public:
   /// Superclass typedef
-  typedef ctkSettingsPanel Superclass;
+  typedef qSlicerSettingsPanel Superclass;
 
   /// Constructor
   explicit qSlicerSettingsPythonPanel(QWidget* parent = 0);

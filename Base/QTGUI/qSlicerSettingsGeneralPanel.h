@@ -23,23 +23,24 @@
 
 // Qt includes
 #include <QWidget>
+#include <QLocale>
 
 // CTK includes
-#include <ctkSettingsPanel.h>
+#include <qSlicerSettingsPanel.h>
 
 // QtGUI includes
 #include "qSlicerBaseQTGUIExport.h"
 
-class QSettings;
+//class QSettings
 class qSlicerSettingsGeneralPanelPrivate;
 
 class Q_SLICER_BASE_QTGUI_EXPORT qSlicerSettingsGeneralPanel
-  : public ctkSettingsPanel
+  : public qSlicerSettingsPanel
 {
   Q_OBJECT
 public:
   /// Superclass typedef
-  typedef ctkSettingsPanel Superclass;
+  typedef qSlicerSettingsPanel Superclass;
 
   /// Constructor
   explicit qSlicerSettingsGeneralPanel(QWidget* parent = 0);
@@ -47,10 +48,20 @@ public:
   /// Destructor
   virtual ~qSlicerSettingsGeneralPanel();
 
+  /*/// Return True if the application is expected to be restarted.
+  bool restartRequested()const;*/
+  /// \sa restartRequested()
+  virtual void setRestartRequested(bool value, const QString& reason);
+
+public slots:
+  virtual void resetSettings();
+  virtual void restoreDefaultSettings();
+
 protected slots:
   void onFontChanged(const QFont& font);
   void onShowToolTipsToggled(bool);
   void onShowToolButtonTextToggled(bool enable);
+  void onLanguageNameChanged(const QString& language);
 
 protected:
   QScopedPointer<qSlicerSettingsGeneralPanelPrivate> d_ptr;

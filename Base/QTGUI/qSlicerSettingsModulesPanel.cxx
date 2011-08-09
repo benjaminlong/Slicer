@@ -50,7 +50,6 @@ public:
   void init();
 
   qSlicerModulesMenu* ModulesMenu;
-  bool RestartRequested;
 };
 
 // --------------------------------------------------------------------------
@@ -61,7 +60,6 @@ qSlicerSettingsModulesPanelPrivate::qSlicerSettingsModulesPanelPrivate(qSlicerSe
   :q_ptr(&object)
 {
   this->ModulesMenu = 0;
-  this->RestartRequested = false;
 }
 
 // --------------------------------------------------------------------------
@@ -121,7 +119,7 @@ void qSlicerSettingsModulesPanelPrivate::init()
                    q, SLOT(onRemoveModulesAdditionalPathClicked()));
 
   // Hide 'Restart requested' label
-  q->setRestartRequested(false);
+  q->setRestartRequested(false,"Modele paths");
 }
 
 // --------------------------------------------------------------------------
@@ -142,17 +140,10 @@ qSlicerSettingsModulesPanel::~qSlicerSettingsModulesPanel()
 }
 
 // --------------------------------------------------------------------------
-bool qSlicerSettingsModulesPanel::restartRequested()const
-{
-  Q_D(const qSlicerSettingsModulesPanel);
-  return d->RestartRequested;
-}
-
-// --------------------------------------------------------------------------
-void qSlicerSettingsModulesPanel::setRestartRequested(bool value)
+void qSlicerSettingsModulesPanel::setRestartRequested(bool value, const QString &reason)
 {
   Q_D(qSlicerSettingsModulesPanel);
-  d->RestartRequested = value;
+  this->Superclass::setRestartRequested(value,reason);
   d->RestartRequestedLabel->setVisible(value);
 }
 
@@ -160,7 +151,7 @@ void qSlicerSettingsModulesPanel::setRestartRequested(bool value)
 void qSlicerSettingsModulesPanel::resetSettings()
 {
   this->Superclass::resetSettings();
-  this->setRestartRequested(false);
+  this->setRestartRequested(false, "Modele paths");
 }
 
 // --------------------------------------------------------------------------
@@ -173,7 +164,7 @@ void qSlicerSettingsModulesPanel::restoreDefaultSettings()
     shouldRestart = true;
     }
   this->Superclass::restoreDefaultSettings();
-  this->setRestartRequested(shouldRestart);
+  this->setRestartRequested(shouldRestart,"Modele paths");
 }
 
 // --------------------------------------------------------------------------
@@ -218,7 +209,17 @@ void qSlicerSettingsModulesPanel::onAdditionalModulePathsChanged()
   Q_D(qSlicerSettingsModulesPanel);
   d->RemoveAdditionalModulePathButton->setEnabled(
         d->AdditionalModulePathsView->directoryList().count() > 0);
-  this->setRestartRequested(true);
+
+  if (this->propertyValue("Modules/AdditionalPaths").toStringList() !=
+      this->previousPropertyValue("Modules/AdditionalPaths").toStringList())
+    {
+    this->setRestartRequested(true,"Modele paths");
+    }
+  else
+    {
+    this->setRestartRequested(false,"Modele paths");
+    }
+
 }
 
 // --------------------------------------------------------------------------

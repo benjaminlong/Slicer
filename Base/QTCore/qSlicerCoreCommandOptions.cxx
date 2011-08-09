@@ -197,6 +197,13 @@ QString qSlicerCoreCommandOptions::tempDirectory() const
 }
 
 //-----------------------------------------------------------------------------
+QString qSlicerCoreCommandOptions::language() const
+{
+  Q_D(const qSlicerCoreCommandOptions);
+  return d->ParsedArgs.value("language").toString();
+}
+
+//-----------------------------------------------------------------------------
 void qSlicerCoreCommandOptions::addArguments()
 {
   this->addArgument("ignore-rest", "-", QVariant::Bool,
@@ -249,6 +256,9 @@ void qSlicerCoreCommandOptions::addArguments()
 
   this->addArgument("disable-message-handlers", "", QVariant::Bool,
                     "Start application disabling the 'terminal' message handlers.");
+
+  this->addArgument("language", "", QVariant::String,
+                    "Start the application with the current language.");
 }
 
 //-----------------------------------------------------------------------------

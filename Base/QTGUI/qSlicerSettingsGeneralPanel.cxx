@@ -20,6 +20,9 @@
 
 // Qt includes
 #include <QMainWindow>
+#include <QTranslator>
+#include <QLocale>
+#include <QSettings>
 
 // CTK includes
 #include <ctkLogger.h>
@@ -44,7 +47,6 @@ protected:
 public:
   qSlicerSettingsGeneralPanelPrivate(qSlicerSettingsGeneralPanel& object);
   void init();
-
 };
 
 // --------------------------------------------------------------------------
@@ -62,12 +64,19 @@ void qSlicerSettingsGeneralPanelPrivate::init()
   Q_Q(qSlicerSettingsGeneralPanel);
 
   this->setupUi(q);
+  /// set the directory where there are all the translations files
+  this->LanguageComboBox->setDirectory("/home/benjaminlong/work/slicer/Slicer4-Superbuild/Slicer-build/Applications/SlicerQT");
+  /// Default values
+  this->LanguageComboBox->setCurrentLanguage("en");
+
   QObject::connect(this->FontButton, SIGNAL(currentFontChanged(const QFont&)),
                    q, SLOT(onFontChanged(const QFont&)));
   QObject::connect(this->ShowToolTipsCheckBox, SIGNAL(toggled(bool)),
                    q, SLOT(onShowToolTipsToggled(bool)));
   QObject::connect(this->ShowToolButtonTextCheckBox, SIGNAL(toggled(bool)),
                    q, SLOT(onShowToolButtonTextToggled(bool)));
+  QObject::connect(this->LanguageComboBox, SIGNAL(currentLanguageNameChanged(const QString&)),
+                   q, SLOT(onLanguageNameChanged(const QString&)));
 
   q->registerProperty("no-splash", this->ShowSplashScreenCheckBox, "checked",
                       SIGNAL(toggled(bool)));
@@ -83,11 +92,15 @@ void qSlicerSettingsGeneralPanelPrivate::init()
                       SIGNAL(toggled(bool)));
   q->registerProperty("MainWindow/ConfirmExit", this->ConfirmExitCheckBox, "checked",
                       SIGNAL(toggled(bool)));
+  q->registerProperty("language", this->LanguageComboBox, "currentLanguage",
+                      SIGNAL(currentLanguageNameChanged(const QString&)));
+
+  // Hide 'Restart requested' label
+  q->Superclass::setRestartRequested(false,"languages");
 }
 
 // --------------------------------------------------------------------------
 // qSlicerSettingsGeneralPanel methods
-
 // --------------------------------------------------------------------------
 qSlicerSettingsGeneralPanel::qSlicerSettingsGeneralPanel(QWidget* _parent)
   : Superclass(_parent)
@@ -101,6 +114,36 @@ qSlicerSettingsGeneralPanel::qSlicerSettingsGeneralPanel(QWidget* _parent)
 qSlicerSettingsGeneralPanel::~qSlicerSettingsGeneralPanel()
 {
 }
+
+// --------------------------------------------------------------------------
+void qSlicerSettingsGeneralPanel::setRestartRequested(bool value, const QString &reason)
+{
+  Q_D(qSlicerSettingsGeneralPanel);
+  this->Superclass::setRestartRequested(value,reason);
+  d->RestartRequestedLabel->setVisible(value);
+}
+
+// --------------------------------------------------------------------------
+void qSlicerSettingsGeneralPanel::resetSettings()
+{
+  this->Superclass::resetSettings();
+  this->setRestartRequested(false,"languages");
+}
+
+// --------------------------------------------------------------------------
+void qSlicerSettingsGeneralPanel::restoreDefaultSettings()
+{
+  bool shouldRestart = false;
+  if (this->defaultPropertyValue("language").toStringList()
+      != this->previousPropertyValue("language").toStringList())
+    {
+    shouldRestart = true;
+    }
+  this->Superclass::restoreDefaultSettings();
+
+  this->setRestartRequested(shouldRestart,"languages");
+}
+
 
 // --------------------------------------------------------------------------
 void qSlicerSettingsGeneralPanel::onFontChanged(const QFont& font)
@@ -124,5 +167,21 @@ void qSlicerSettingsGeneralPanel::onShowToolButtonTextToggled(bool enable)
       {
       mainWindow->setToolButtonStyle(enable ? Qt::ToolButtonTextUnderIcon : Qt::ToolButtonIconOnly);
       }
+    }
+}
+
+// --------------------------------------------------------------------------
+void qSlicerSettingsGeneralPanel::onLanguageNameChanged(const QString& name)
+{
+  Q_D(qSlicerSettingsGeneralPanel);
+  d->LanguageComboBox->setCurrentLanguage(name);
+  if(this->propertyValue("language").toString() !=
+     this->previousPropertyValue("language").toString())
+    {
+    this->setRestartRequested(true,"languages");
+    }
+  else
+    {
+    this->setRestartRequested(false,"languages");
     }
 }

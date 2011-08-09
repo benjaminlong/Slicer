@@ -24,6 +24,7 @@
 #include <QSettings>
 #include <QTimer>
 #include <QToolButton>
+#include <QStringList>
 
 // CTK includes
 #include <ctkConfirmExitDialog.h>
@@ -44,6 +45,7 @@
 #include "qSlicerIOManager.h"
 #include "qSlicerSettingsModulesPanel.h"
 #include "qSlicerSettingsGeneralPanel.h"
+#include "qSlicerSettingsPanel.h"
 
 #ifdef Slicer_USE_PYTHONQT
 #include "qSlicerSettingsPythonPanel.h"
@@ -270,6 +272,8 @@ void qSlicerMainWindowPrivate::setupUi(QMainWindow * mainWindow)
   this->actionFeedbackMakeFeatureRequest->setIcon(questionIcon);
   this->actionFeedbackCommunitySlicerVisualBlog->setIcon(networkIcon);
 
+  QObject::connect(qSlicerApplication::application()->settingsDialog(), SIGNAL(accepted()),
+                   q, SLOT(onSettingDialogAccepted()));
 }
 
 //-----------------------------------------------------------------------------
@@ -491,6 +495,48 @@ void qSlicerMainWindow::onViewExtensionManagerActionTriggered()
 void qSlicerMainWindow::onViewApplicationSettingsActionTriggered()
 {
   qSlicerApplication::application()->settingsDialog()->exec();
+}
+
+// --------------------------------------------------------------------------
+void qSlicerMainWindow::onSettingDialogAccepted()
+{
+  Q_D(qSlicerMainWindow);
+  QStringList settingPanelNames;
+  settingPanelNames << "General settings"
+                    << "Modules settings"
+                    #ifdef Slicer_USE_PYTHONQT      /// Not sure
+                    << "Python settings"
+                    #endif
+                    ;
+
+  ctkSettingsDialog * settingsDialog = 
+    qSlicerApplication::application()->settingsDialog();
+
+  QList<QString> settings;
+  // Recover all the settings needing a restart in a QList
+  foreach(const QString& settingPanelName, settingPanelNames)
+    {
+    qSlicerSettingsPanel *settingsPanel =
+      qobject_cast<qSlicerSettingsPanel*>(settingsDialog->panel(settingPanelName));
+    Q_ASSERT(settingsPanel);
+    if (settingsPanel->restartRequested())
+      {
+      settings.append(settingsPanel->getReasonRestart());
+      }
+    }
+
+  if(settings.size() > 0)
+    {
+    QString reason = QString(tr(" Since the "));
+    for (int i = 0 ; i < settings.size() ; i++)
+    {
+      reason += settings[i];
+      reason += " ";
+    }
+    reason += tr("have been updated, the application should be restarted.\n\n");
+    reason += tr("\n Do you want to restart now?\n");
+    qSlicerApplication::application()->confirmRestart(reason);
+    }
 }
 
 //---------------------------------------------------------------------------

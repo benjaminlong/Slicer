@@ -46,6 +46,7 @@ class Q_SLICER_BASE_QTCORE_EXPORT qSlicerCoreCommandOptions : public ctkCommandL
   Q_PROPERTY(bool verboseModuleDiscovery READ verboseModuleDiscovery)
   Q_PROPERTY(bool disableMessageHandlers READ disableMessageHandlers)
   Q_PROPERTY(QString tempDirectory READ tempDirectory)
+  Q_PROPERTY(QString language READ language)
 public:
   typedef ctkCommandLineParser Superclass;
   qSlicerCoreCommandOptions();
@@ -107,6 +108,9 @@ public:
   /// the value returned by QDir::tempPath()
   /// See http://qt.nokia.com/doc/4.6/qdir.html#tempPath
   QString tempDirectory()const;
+
+  /// Return the language selected in the settings
+  QString language()const;
 
 protected:
   /// Add arguments - Called from parse() method

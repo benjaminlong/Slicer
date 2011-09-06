@@ -242,4 +242,3 @@ if(EXISTS "@Slicer_TARGETS_FILE@")
 endif()
 
 set(SlicerConfig_INCLUDED_ONCE 1 CACHE INTERNAL "True if SlicerConfig has already been included")
-

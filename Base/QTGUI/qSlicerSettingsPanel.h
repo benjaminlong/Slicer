@@ -18,7 +18,7 @@ class Q_SLICER_BASE_QTGUI_EXPORT qSlicerSettingsPanel
   : public ctkSettingsPanel
 {
   Q_OBJECT
-  //Q_PROPERTY(bool restartRequested READ restartRequested WRITE setRestartRequested)
+  Q_PROPERTY(bool restartRequested READ restartRequested WRITE setRestartRequested)
 public:
   /// Superclass typedef
   typedef ctkSettingsPanel Superclass;
@@ -30,7 +30,7 @@ public:
   /// Return True if the application is expected to be restarted.
   bool restartRequested()const;
   /// \sa restartRequested()
-  void setRestartRequested(bool value, const QString& reason);
+  void setRestartRequested(bool value, const QString& reason=QString());
 
   QList<QString> getReasonRestart();
   

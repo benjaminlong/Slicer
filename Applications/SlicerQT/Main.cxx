@@ -19,9 +19,12 @@
 ==============================================================================*/
 
 // Qt includes
+#include <QList>
 #include <QMessageBox>
 #include <QSplashScreen>
 #include <QTimer>
+#include <QTranslator>
+#include <QString>
 
 // Slicer includes
 #include "vtkSlicerConfigure.h" // For Slicer_USE_PYTHONQT
@@ -49,6 +52,7 @@
 #include "qSlicerStyle.h"
 
 // Slicer includes
+#include "vtkSlicerConfigure.h" // For Slicer_QM_OUTPUT_DIRS, Slicer_INSTALL_QM_DIR
 #include "vtkSlicerVersionConfigure.h" // For Slicer_VERSION_FULL
 
 // VTK includes
@@ -242,10 +246,63 @@ void splashMessage(QScopedPointer<QSplashScreen>& splashScreen, const QString& m
 } // end of anonymous namespace
 
 //----------------------------------------------------------------------------
+void loadTranslations(const QString& dir)
+{
+  qSlicerApplication * app = qSlicerApplication::application();
+  Q_ASSERT(app);
+
+  QString localeFilter = QString( QString("*") + app->commandOptions()->language());
+  localeFilter.resize(3);
+  localeFilter += QString(".qm");
+
+  QDir directory(dir);
+  QStringList qmFiles = directory.entryList(QStringList(localeFilter));
+
+  foreach(QString qmFile, qmFiles)
+    {
+    QTranslator* translator = new QTranslator();
+    QString qmFilePath = QString(dir + QString("/") + qmFile);
+    qDebug() << "qmFilePath : " << qmFilePath ;
+    if(!translator->load(qmFilePath))
+      {
+      qDebug() << "The File " << qmFile << " hasn't been loaded in the translator";
+      return;
+      }
+    app->installTranslator(translator);
+    }
+}
+
+//----------------------------------------------------------------------------
+void loadLanguage()
+{
+  qSlicerApplication * app = qSlicerApplication::application();
+  Q_ASSERT(app);
+
+  // we check if the application is installed or not.
+  if (app->isInstalled())
+    {
+    qDebug() << "is installed";
+    QString qmDir = QString(Slicer_QM_DIR);
+    loadTranslations(qmDir);
+    }
+  else
+    {
+    qDebug() << "not installed";
+    QStringList qmDirs = QString(Slicer_QM_OUTPUT_DIRS).split(";");
+    foreach(QString qmDir, qmDirs)
+      {
+      qDebug() << "qmDir : " << qmDir;
+      loadTranslations(qmDir);
+      }
+    }
+}
+
+//----------------------------------------------------------------------------
 int main(int argc, char* argv[])
 {
   QCoreApplication::setApplicationName("Slicer");
   QCoreApplication::setApplicationVersion(Slicer_VERSION_FULL);
+  qDebug() << Slicer_VERSION_FULL;
   //qSlicerCoreApplication::setAttribute(qSlicerCoreApplication::AA_DisablePython);
   //vtkObject::SetGlobalWarningDisplay(false);
   QApplication::setDesktopSettingsAware(false);
@@ -267,6 +324,9 @@ int main(int argc, char* argv[])
     {
     return EXIT_SUCCESS;
     }
+
+  // We load the language selected for the application
+  loadLanguage();
 
 #ifdef Slicer_USE_PYTHONQT
   ctkPythonConsole pythonConsole;

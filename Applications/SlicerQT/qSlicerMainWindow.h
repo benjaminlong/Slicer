@@ -65,6 +65,7 @@ protected slots:
   void onMRMLSceneModified(vtkObject*);
   void onLayoutActionTriggered(QAction* action);
   void onLayoutChanged(int);
+  void onSettingDialogAccepted();
 protected:
 
   // Description:

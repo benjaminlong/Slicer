@@ -38,6 +38,7 @@
 #define Slicer_INCLUDE_DIR "@Slicer_INCLUDE_DIR@"
 #define Slicer_SHARE_DIR "@Slicer_SHARE_DIR@"
 #define Slicer_ITKFACTORIES_DIR "@Slicer_ITKFACTORIES_DIR@"
+#define Slicer_QM_DIR "@Slicer_QM_DIR@"
 
 #define Slicer_QtPlugins_DIR "@Slicer_QtPlugins_DIR@"
 
@@ -80,5 +81,7 @@
 #define VTK_DIR "@VTK_DIR@"
 #define CTK_DIR "@CTK_DIR@"
 //#define Teem_DIR "@Teem_DIR@"
+
+#define Slicer_QM_OUTPUT_DIRS "@Slicer_QM_OUTPUT_DIRS@"
 
 #endif //__vtkSlicerConfigure_h

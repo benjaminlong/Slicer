@@ -32,6 +32,17 @@ set(CMAKE_MODULE_PATH
 set(Slicer_CMAKE_DIR ${Slicer_SOURCE_DIR}/CMake)
 set(Slicer_EXTENSIONS_CMAKE_DIR ${Slicer_SOURCE_DIR}/Extensions/CMake)
 
+#------------------
+# VAriable Slicer_LANGUAGES
+#------------------
+set(LANGUAGES
+  "fr"
+  "es"
+  "en"
+  "de"
+  )
+set_property(GLOBAL PROPERTY Slicer_LANGUAGES ${LANGUAGES})
+
 #-----------------------------------------------------------------------------
 # Sanity checks
 #------------------------------------------------------------------------------
@@ -65,6 +76,7 @@ include(SlicerMacroExtractRepositoryInfo)
 include(SlicerMacroGetPlatformArchitectureBitness)
 include(SlicerMacroParseArguments)
 include(SlicerMacroEmptyExternalProject)
+include(SlicerMacroTranslation)
 include(SlicerFunctionInstallLibrary)
 
 if(CMAKE_PATCH_VERSION LESS 3)
@@ -146,6 +158,7 @@ CMAKE_DEPENDENT_OPTION(
   Slicer_UPLOAD_EXTENSIONS "Build, test, package and upload extensions" OFF
   "Slicer_BUILD_EXTENSIONS" OFF
   )
+option(Slicer_UPDATE_TRANSLATION "update translation" OFF )
 
 #-----------------------------------------------------------------------------
 # External projects related options
@@ -242,6 +255,7 @@ set(Slicer_LIB_DIR "lib/Slicer3")
 set(Slicer_INCLUDE_DIR "include/Slicer")
 set(Slicer_SHARE_DIR "share/Slicer")
 set(Slicer_ITKFACTORIES_DIR "${Slicer_LIB_DIR}/ITKFactories")
+set(Slicer_QM_DIR "${Slicer_BIN_DIR}/Translations")
 
 set(Slicer_CLIMODULES_BIN_DIR "plugins")
 set(Slicer_CLIMODULES_LIB_DIR "plugins")
@@ -262,6 +276,7 @@ set(Slicer_INSTALL_LIB_DIR "${Slicer_INSTALL_ROOT}${Slicer_LIB_DIR}")
 set(Slicer_INSTALL_INCLUDE_DIR "${Slicer_INSTALL_ROOT}${Slicer_INCLUDE_DIR}")
 set(Slicer_INSTALL_SHARE_DIR "${Slicer_INSTALL_ROOT}${Slicer_SHARE_DIR}")
 set(Slicer_INSTALL_ITKFACTORIES_DIR "${Slicer_INSTALL_LIB_DIR}/ITKFactories")
+set(Slicer_INSTALL_QM_DIR "${Slicer_INSTALL_ROOT}${Slicer_QM_DIR}")
 
 set(Slicer_INSTALL_CLIMODULES_BIN_DIR "${Slicer_INSTALL_ROOT}${Slicer_CLIMODULES_BIN_DIR}")
 set(Slicer_INSTALL_CLIMODULES_LIB_DIR "${Slicer_INSTALL_ROOT}${Slicer_CLIMODULES_LIB_DIR}")
@@ -594,34 +609,6 @@ install(FILES
   COMPONENT Development
   )
 
-# --------------------------------------------------------------------------
-# Configure and install headers
-# --------------------------------------------------------------------------
-set(files
-  vtkSlicerConfigure.h
-  vtkSlicerVersionConfigure.h
-  Scripts/runValgrind.sh
-  Scripts/runValgrindForOneModule.sh
-  Scripts/runValgrindForOneModuleWithSlicer4AndQT.sh
-  Scripts/computeCodeCoverageLocally.sh
-  Scripts/computeCodeCoverageForOneTest.sh
-  Scripts/runExperimentalOffScreen.sh
-  )
-foreach(f ${files})
-  configure_file(
-    ${CMAKE_CURRENT_SOURCE_DIR}/${f}.in
-    ${CMAKE_CURRENT_BINARY_DIR}/${f}
-    )
-endforeach()
-
-if(NOT Slicer_INSTALL_NO_DEVELOPMENT)
-  install(FILES
-    "${CMAKE_CURRENT_BINARY_DIR}/vtkSlicerConfigure.h"
-    "${CMAKE_CURRENT_BINARY_DIR}/vtkSlicerVersionConfigure.h"
-    DESTINATION ${Slicer_INSTALL_INCLUDE_DIR} COMPONENT Development
-    )
-endif()
-
 #-----------------------------------------------------------------------------
 # CLI wrapper
 #-----------------------------------------------------------------------------
@@ -698,6 +685,39 @@ endif()
 #-----------------------------------------------------------------------------
 add_subdirectory(Applications)
 
+# --------------------------------------------------------------------------
+# Recover the QM output directories
+# --------------------------------------------------------------------------
+get_property(Slicer_QM_OUTPUT_DIRS GLOBAL PROPERTY Slicer_QM_OUTPUT_DIRS)
+
+# --------------------------------------------------------------------------
+# Configure and install headers
+# --------------------------------------------------------------------------
+set(files
+  vtkSlicerConfigure.h
+  vtkSlicerVersionConfigure.h
+  Scripts/runValgrind.sh
+  Scripts/runValgrindForOneModule.sh
+  Scripts/runValgrindForOneModuleWithSlicer4AndQT.sh
+  Scripts/computeCodeCoverageLocally.sh
+  Scripts/computeCodeCoverageForOneTest.sh
+  Scripts/runExperimentalOffScreen.sh
+  )
+foreach(f ${files})
+  configure_file(
+    ${CMAKE_CURRENT_SOURCE_DIR}/${f}.in
+    ${CMAKE_CURRENT_BINARY_DIR}/${f}
+    )
+endforeach()
+
+if(NOT Slicer_INSTALL_NO_DEVELOPMENT)
+  install(FILES
+    "${CMAKE_CURRENT_BINARY_DIR}/vtkSlicerConfigure.h"
+    "${CMAKE_CURRENT_BINARY_DIR}/vtkSlicerVersionConfigure.h"
+    DESTINATION ${Slicer_INSTALL_INCLUDE_DIR} COMPONENT Development
+    )
+endif()
+
 #-----------------------------------------------------------------------------
 # Testing
 #-----------------------------------------------------------------------------
@@ -769,4 +789,3 @@ endif()
 # the end of the whole configuration process, as a "last step".
 # This directory is typically the last add_subdirectory in the main CMakeLists.txt.
 add_subdirectory(Utilities/LastConfigureStep)
-

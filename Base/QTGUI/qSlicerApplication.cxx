@@ -141,11 +141,13 @@ void qSlicerApplicationPrivate::init()
   // Settings Dialog
   //----------------------------------------------------------------------------
   this->SettingsDialog = new ctkSettingsDialog(0);
-  this->SettingsDialog->addPanel("General settings", new qSlicerSettingsGeneralPanel);
+  qSlicerSettingsGeneralPanel * settingsGeneralPanel = new qSlicerSettingsGeneralPanel;
+  this->SettingsDialog->addPanel("General settings", settingsGeneralPanel);
   qSlicerSettingsModulesPanel * settingsModulesPanel = new qSlicerSettingsModulesPanel;
   this->SettingsDialog->addPanel("Modules settings", settingsModulesPanel);
 
-  settingsModulesPanel->setRestartRequested(false);
+  settingsGeneralPanel->setRestartRequested(false,"languages");
+  settingsModulesPanel->setRestartRequested(false,"Modele paths");
   QObject::connect(this->SettingsDialog, SIGNAL(accepted()),
                    q, SLOT(onSettingDialogAccepted()));
 }

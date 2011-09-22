@@ -4,8 +4,10 @@
 #include "ui_qSlicerAnnotationModuleSnapShotDialog.h"
 #include "Logic/vtkSlicerAnnotationModuleLogic.h"
 
+#include "qMRMLScreenShotDialog.h"
+
 /// \ingroup Slicer_QtModules_Annotation
-class qSlicerAnnotationModuleSnapShotDialog : public QDialog
+class qSlicerAnnotationModuleSnapShotDialog : public qMRMLScreenShotDialog
 {
   Q_OBJECT
 public:
@@ -17,46 +19,22 @@ public:
 
   /// Initialize this dialog with values from an existing annotation Snapshot node.
   void initialize(const char* nodeId);
-
-  /// Reset the dialog.
+  /// Reset the dialog and give it a unique name.
   void reset();
 
 protected:
 
 protected slots:
 
-  void onDialogRejected();
-  void onDialogAccepted();
-
-  /// Slots for the four radio buttons to select screenShot area
-  void onThreeDViewRadioClicked();
-  void onRedSliceViewRadioClicked();
-  void onYellowSliceViewRadioClicked();
-  void onGreenSliceViewRadioClicked();
-  void onFullLayoutRadioClicked();
-  void onScaleFactorSpinBoxChanged();
+  virtual void onDialogRejected();
+  virtual void onDialogAccepted();
 
 signals:
   void dialogRejected();
   void dialogAccepted();
 
 private:
-
-    Ui::qSlicerAnnotationModuleSnapShotDialog ui;
-    void createConnection();
-
-    /// Grab a screenshot of the 3DView or any sliceView.
-    /// The screenshotWindow is Red, Green, Yellow for a sliceView or empty for a ThreeDView
-    void grabScreenShot(QString screenshotWindow);
-
     vtkSlicerAnnotationModuleLogic* m_Logic;
-
-    vtkImageData* m_vtkImageData;
-
-    /// The ID of the associated snapshot node.
-    /// This is NULL if the dialog has no associated snapshot node (== new snapshot mode).
-    vtkStdString m_Id;
-
 };
 
 #endif

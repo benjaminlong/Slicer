@@ -1,3 +1,5 @@
+#include <QDebug>
+
 // Annotation includes
 #include "Logic/vtkSlicerAnnotationModuleLogic.h"
 
@@ -2881,7 +2883,7 @@ vtkMRMLAnnotationHierarchyNode *vtkSlicerAnnotationModuleLogic::GetActiveHierarc
   //---------------------------------------------------------------------------
   void vtkSlicerAnnotationModuleLogic::CreateSnapShot(const char* name, const char* description, int screenshotType, double scaleFactor, vtkImageData* screenshot)
   {
-
+    qDebug() << "Name SnapShot : " << name << "Description : " << description;
     if (!screenshot)
       {
       vtkErrorMacro("CreateSnapShot: No screenshot was set.")

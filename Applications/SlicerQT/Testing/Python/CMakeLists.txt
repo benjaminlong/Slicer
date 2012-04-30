@@ -65,11 +65,11 @@ set_tests_properties(py_SlicerTestingExitFailureTest PROPERTIES WILL_FAIL TRUE)
 # Check if Tutorial work as expected
 #
 
-if(Slicer_USE_QtTesting)
-  slicer_add_python_test(
-    SCRIPT SlicerQtTestingDTITutorial.py
-    SLICER_ARGS --launcher-no-splash --qt-testing)
-endif()
+#if(Slicer_USE_QtTesting)
+#  slicer_add_python_test(
+#    SCRIPT SlicerQtTestingDTITutorial.py
+#    SLICER_ARGS --launcher-no-splash --qt-testing)
+#endif()
 
 
 #

@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<xml>
+    <settings>
+        <name widget="qApp" command="applicationName" arguments="Slicer"/>
+        <version widget="qApp" command="applicationVersion" arguments="4.1.0-rc1-2012-03-23"/>
+        <geometry widget="MainWindow" command="mainWindowGeometry" arguments="01d9d0cb000100000000000000000018000004b40000031a0000000600000031000004ae00000314000000000000"/>
+        <state widget="MainWindow" command="mainWindowState" arguments="000000ff00000000fd0000000100000000000001b500000292fc0200000001fb0000001e00500061006e0065006c0044006f0063006b005700690064006700650074010000003c000002920000012f00ffffff000002ee0000029200000004000000040000000800000008fc00000001000000020000000700000016004d00610069006e0054006f006f006c0042006100720100000000ffffffff00000000000000000000002a004d006f00640075006c006500530065006c006500630074006f00720054006f006f006c0042006100720100000078ffffffff00000000000000000000001a004d006f00640075006c00650054006f006f006c004200610072010000022a000000d300000000000000000000001600560069006500770054006f006f006c00420061007201000002fd0000004100000000000000000000001c00430061007000740075007200650054006f006f006c004200610072010000033effffffff000000000000000000000020004d006f007500730065004d006f006400650054006f006f006c00420061007201000003b6ffffffff00000000000000000000001c00560069006500770065007200730054006f006f006c004200610072010000045fffffffff0000000000000000"/>
+        <layout widget="qSlicerLayoutManager" command="layout" arguments="0"/>
+    </settings>
+    <events>
+        <event widget="qSlicerMainWindow/ModuleSelectorToolBar/1ctkMenuComboBox0" command="show_popup" arguments="true"/>
+        <event widget="qSlicerMainWindow/ModuleSelectorToolBar/1ctkMenuComboBox0" command="show_popup" arguments="false"/>
+        <event widget="qSlicerMainWindow/ModuleSelectorToolBar/1ctkMenuComboBox0" command="triggered" arguments="Data"/>
+        <event widget="qSlicerMainWindow/ModuleSelectorToolBar/1ctkMenuComboBox0" command="triggered" arguments="Data"/>
+        <event widget="qSlicerMainWindow/ModuleSelectorToolBar/1ctkMenuComboBox0" command="triggered" arguments="Data"/>
+        <event widget="qSlicerMainWindow/menubar" command="activate" arguments="menuFile"/>
+        <event widget="qSlicerMainWindow/menubar/menuFile" command="activate" arguments="actionFileLoadScene"/>
+        <event widget="LoadSceneDialog" command="comment" arguments="Loading slicer3minute.mrml ... "/>
+        <event widget="LoadSceneDialog" command="newFile" arguments="/home/benjaminlong/work/slicer/Tuto1-Slicer3.6/slicer3minute.mrml"/>
+        <event widget="qSlicerMainWindow/PanelDockWidget/dockWidgetContents/ModulePanel/ScrollArea/qt_scrollarea_viewport/scrollAreaWidgetContents/qSlicerDataModule/DisplayModifiyButton/MRMLTreeView" command="setCurrent" arguments="0.0.4.0"/>
+        <event widget="qSlicerMainWindow/PanelDockWidget/dockWidgetContents/ModulePanel/ScrollArea/qt_scrollarea_viewport/scrollAreaWidgetContents/qSlicerDataModule/DisplayModifiyButton/MRMLTreeView" command="setCurrent" arguments="0.0.5.0"/>
+        <event widget="qSlicerMainWindow/PanelDockWidget/dockWidgetContents/ModulePanel/ScrollArea/qt_scrollarea_viewport/scrollAreaWidgetContents/qSlicerDataModule/DisplayModifiyButton/MRMLTreeView" command="currentNodeDeleted" arguments="0.0.4.0"/>
+        <event widget="qSlicerMainWindow/PanelDockWidget/dockWidgetContents/ModulePanel/ScrollArea/qt_scrollarea_viewport/scrollAreaWidgetContents/qSlicerDataModule/DisplayModifiyButton/MRMLTreeView" command="setCurrent" arguments="0.0.8.0"/>
+        <event widget="qSlicerMainWindow/PanelDockWidget/dockWidgetContents/ModulePanel/ScrollArea/qt_scrollarea_viewport/scrollAreaWidgetContents/qSlicerDataModule/DisplayModifiyButton/MRMLTreeView" command="edit" arguments="0.0.8.0"/>
+        <event widget="qSlicerMainWindow/PanelDockWidget/dockWidgetContents/ModulePanel/ScrollArea/qt_scrollarea_viewport/scrollAreaWidgetContents/qSlicerDataModule/DisplayModifiyButton/MRMLTreeView/qt_scrollarea_viewport/1QExpandingLineEdit0" command="set_string" arguments="te"/>
+        <event widget="qSlicerMainWindow/PanelDockWidget/dockWidgetContents/ModulePanel/ScrollArea/qt_scrollarea_viewport/scrollAreaWidgetContents/qSlicerDataModule/DisplayModifiyButton/MRMLTreeView/qt_scrollarea_viewport/1QExpandingLineEdit0" command="set_string" arguments="test"/>
+        <event widget="qSlicerMainWindow/PanelDockWidget/dockWidgetContents/ModulePanel/ScrollArea/qt_scrollarea_viewport/scrollAreaWidgetContents/qSlicerDataModule/DisplayModifiyButton/MRMLTreeView/qt_scrollarea_viewport/1QExpandingLineEdit0" command="set_string" arguments="test"/>
+        <event widget="qSlicerMainWindow/PanelDockWidget/dockWidgetContents/ModulePanel/ScrollArea/qt_scrollarea_viewport/scrollAreaWidgetContents/qSlicerDataModule/DisplayModifiyButton/MRMLTreeView/qt_scrollarea_viewport/1QExpandingLineEdit0" command="set_string" arguments="test"/>
+        <event widget="qSlicerMainWindow/PanelDockWidget/dockWidgetContents/ModulePanel/ScrollArea/qt_scrollarea_viewport/scrollAreaWidgetContents/qSlicerDataModule/DisplayModifiyButton/MRMLTreeView" command="editAccepted" arguments="0.0.8.0,test"/>
+        <event widget="qSlicerMainWindow/menubar" command="activate" arguments="menuFile"/>
+        <event widget="qSlicerMainWindow/menubar/menuFile" command="activate" arguments="actionFileCloseScene"/>
+        <event widget="qSlicerMainWindow/PanelDockWidget/dockWidgetContents/ModulePanel/ScrollArea/qt_scrollarea_viewport/scrollAreaWidgetContents/qSlicerDataModule/DisplayModifiyButton/MRMLTreeView" command="setCurrent" arguments="0.0.1.0"/>
+        <event widget="qSlicerMainWindow/PanelDockWidget/dockWidgetContents/ModulePanel/ScrollArea/qt_scrollarea_viewport/scrollAreaWidgetContents/qSlicerDataModule/DisplayModifiyButton/MRMLTreeView" command="setCurrent" arguments="0.0.1.0"/>
+        <event widget="qSlicerMainWindow/PanelDockWidget/dockWidgetContents/ModulePanel/ScrollArea/qt_scrollarea_viewport/scrollAreaWidgetContents/qSlicerDataModule/DisplayModifiyButton/MRMLTreeView" command="setCurrent" arguments="0.0.1.0"/>
+        <event widget="qSlicerMainWindow/PanelDockWidget/dockWidgetContents/ModulePanel/ScrollArea/qt_scrollarea_viewport/scrollAreaWidgetContents/qSlicerDataModule/DisplayModifiyButton/MRMLTreeView" command="setCurrent" arguments="0.0"/>
+    </events>
+</xml>

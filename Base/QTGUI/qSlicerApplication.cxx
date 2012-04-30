@@ -23,11 +23,18 @@
 #include <QDebug>
 #include <QMainWindow>
 
+#include "vtkSlicerConfigure.h" // For Slicer_USE_QtTesting
+
 // CTK includes
 #include <ctkColorDialog.h>
 #include <ctkErrorLogModel.h>
 #include <ctkMessageBox.h>
 #include <ctkSettings.h>
+#ifdef Slicer_USE_QtTesting
+#include <ctkQtTestingUtility.h>
+#include <ctkXMLEventObserver.h>
+#include <ctkXMLEventSource.h>
+#endif
 #include <ctkToolTipTrapper.h>
 
 // QTGUI includes
@@ -48,8 +55,22 @@
 #include "qSlicerSettingsGeneralPanel.h"
 #include "qSlicerSettingsModulesPanel.h"
 
+//// QTCLI includes
+//#ifdef Slicer_USE_QtTesting
+//#include "qSlicerCLIModuleWidgetEventPlayer.h"
+//#endif
+
 // qMRMLWidget includes
 #include "qMRMLEventBrokerConnection.h"
+
+// qMRML includes
+#ifdef Slicer_USE_QtTesting
+#include <qMRMLCheckableNodeComboBoxEventPlayer.h>
+#include <qMRMLNodeComboBoxEventPlayer.h>
+#include <qMRMLNodeComboBoxEventTranslator.h>
+#include <qMRMLTreeViewEventPlayer.h>
+#include <qMRMLTreeViewEventTranslator.h>
+#endif
 
 // Logic includes
 #include <vtkSlicerApplicationLogic.h>
@@ -81,6 +102,9 @@ public:
   qSlicerLayoutManager*   LayoutManager;
   ctkToolTipTrapper*      ToolTipTrapper;
   ctkSettingsDialog*      SettingsDialog;
+#ifdef Slicer_USE_QtTesting
+  ctkQtTestingUtility*    TestingUtility;
+#endif
 };
 
 
@@ -95,6 +119,9 @@ qSlicerApplicationPrivate::qSlicerApplicationPrivate(
   this->LayoutManager = 0;
   this->ToolTipTrapper = 0;
   this->SettingsDialog = 0;
+#ifdef Slicer_USE_QtTesting
+  this->TestingUtility = 0;
+#endif
 }
 
 //-----------------------------------------------------------------------------
@@ -102,6 +129,10 @@ qSlicerApplicationPrivate::~qSlicerApplicationPrivate()
 {
   delete this->SettingsDialog;
   this->SettingsDialog = 0;
+#ifdef Slicer_USE_QtTesing
+  delete this->TestingUtility;
+  this->TestingUtility = 0;
+#endif
 }
 
 //-----------------------------------------------------------------------------
@@ -150,6 +181,33 @@ void qSlicerApplicationPrivate::init()
 
   QObject::connect(this->SettingsDialog, SIGNAL(accepted()),
                    q, SLOT(onSettingDialogAccepted()));
+
+  //----------------------------------------------------------------------------
+  // Test Utility
+  //----------------------------------------------------------------------------
+#ifdef Slicer_USE_QtTesting
+  this->TestingUtility = new ctkQtTestingUtility(0);
+  this->TestingUtility->addEventObserver(
+      "xml", new ctkXMLEventObserver(this->TestingUtility));
+  ctkXMLEventSource* eventSource = new ctkXMLEventSource(this->TestingUtility);
+  eventSource->setRestoreSettingsAuto(
+      qSlicerApplication::testAttribute(qSlicerCoreApplication::AA_EnableTesting));
+  this->TestingUtility->addEventSource("xml", eventSource);
+
+  // Translator and Player for MRML widget
+  this->TestingUtility->addPlayer(
+      new qMRMLCheckableNodeComboBoxEventPlayer());
+  this->TestingUtility->addPlayer(
+      new qMRMLNodeComboBoxEventPlayer());
+  this->TestingUtility->addTranslator(
+      new qMRMLNodeComboBoxEventTranslator());
+  this->TestingUtility->addPlayer(
+      new qMRMLTreeViewEventPlayer());
+  this->TestingUtility->addTranslator(
+      new qMRMLTreeViewEventTranslator());
+
+  // Player for the CLI Module || cannot be added for the moment ...
+#endif
 }
 /*
 #if !defined (QT_NO_LIBRARY) && !defined(QT_NO_SETTINGS)
@@ -221,6 +279,15 @@ qSlicerPythonManager* qSlicerApplication::pythonManager()
     }
 
   return _pythonManager;
+}
+#endif
+
+#ifdef Slicer_USE_QtTesting
+//-----------------------------------------------------------------------------
+ctkQtTestingUtility* qSlicerApplication::testingUtility()
+{
+  Q_D(const qSlicerApplication);
+  return d->TestingUtility;
 }
 #endif
 
